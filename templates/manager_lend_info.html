@@ -1,0 +1,43 @@
+{% extends 'base_manager.html' %}
+{% load static %}
+{% block title %}图书管理{% endblock %}
+{% block css %}
+{% endblock %}
+
+{% block content %}
+<h3><i class="fa fa-angle-right"></i> 所有书籍未还的借阅信息</h3>
+<div class="row mt">
+    <div class="col-md-12">
+        <div class="form-panel">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    {% for name in table.names %}
+                    <th>{{ name }}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for record in table.records %}
+                <tr>
+                    {% for value in record.values %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                    {% if record.backed %}
+                  	<td><a>已归还</a></td>
+                  	{% elif record.over_time %}
+                  	<td><a style="color: red;">已逾期</a></td>
+                  	{% else %}
+                  	<td><a style="color: green;">尚未归还</a></td>
+                  	{% endif %}
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+        $('#sidebar').find("a:eq(4)").attr("class", "active")
+</script>
+{% endblock %}

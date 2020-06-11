@@ -1,0 +1,91 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>{% block title %}图书管理{% endblock %}</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!--external css-->
+    <link href="{% static 'lib/font-awesome/css/font-awesome.css' %}" rel="stylesheet" />
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    {% block css %}{% endblock %}
+  </head>
+  <body>
+    <header class="header black-bg">
+      <div class="sidebar-toggle-box">
+        <div class="fa fa-bars tooltips" data-placement="right"></div>
+      </div>
+      <!--logo start-->
+      <a href="{% url 'index' %}" class="logo"><b>图书管<span>理</span></b></a>
+      <!--logo end-->
+      <div class="top-menu">
+        <ul class="nav pull-right top-menu">
+          <li>
+            {% if login_state == 1 or login_state == 2 %}
+            <a class="logout" href="{% url 'login' %}">登出</a>
+            {% else %}
+            <a class="logout" href="{% url 'login' %}">登录</a>
+            {% endif %}
+          </li>
+        </ul>
+      </div>
+    </header>
+    <aside>
+      <div id="sidebar" class="nav-collapse ">
+        <!-- sidebar menu start-->
+        <ul class="sidebar-menu" id="nav-accordion">
+          <h5 class="centered">{{ userinfo.username }}</h5>
+          <li>
+            <a href="{% url 'reader'%}">
+              <span>我的账户 </span>
+              </a>
+          </li>
+          <li>
+            <a href="{% url 'reader_account'%}">
+              <span>修改密码 </span>
+              </a>
+          </li>
+          <li>
+            <a href="{% url 'reader_lend'%}">
+              <span>借阅图书 </span>
+              </a>
+          </li>
+          <li>
+            <a href="{% url 'reader_history'%}">
+              <span>借阅历史 </span>
+              </a>
+          </li>
+        </ul>
+        <!-- sidebar menu end-->
+      </div>
+    </aside>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+    <script class="include" type="text/javascript" src="{% static 'lib/jquery.dcjqaccordion.2.7.js' %}"></script>
+    <script src="{% static 'lib/jquery.scrollTo.min.js' %}"></script>
+    <script src="{% static 'lib/jquery.nicescroll.js' %}" type="text/javascript"></script>
+    <script src="{% static 'lib/common-scripts.js' %}"></script>
+    <script type="text/javascript">{{script}}('{{wrong}}')</script>
+    <section id="main-content">
+      <section class="wrapper">
+        {% block content %}{% endblock %}
+      </section>
+    </section>
+  </body>
+</html>
