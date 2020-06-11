@@ -1,0 +1,35 @@
+{% extends 'base_manager.html' %}
+{% load static %}
+{% block title %}我的账户{% endblock %}
+{% block css %}
+{% endblock %}
+
+{% block content %}
+<h3><i class="fa fa-angle-right"></i> 删除图书</h3>
+<div class="row mt">
+    <div class="col-lg-12">
+        <div class="form-panel">
+                <form class="form-horizontal style-form" action="{% url 'manager_delete' %}" method="post">
+                {% csrf_token %}
+                <input name="type" hidden>
+                <div class="form-group">
+                    <label class="col-sm-2 col-sm-2 control-label">输入要删除的图书ISBN</label>
+                    <div class="col-sm-10">
+                        <input name="isbn" class="form-control" placeholder="">
+                    </div>
+                </div>
+                <div style="width: 100%;display:flex;justify-content:center;">
+                    <div class="form-group" style="border-bottom: 0px; margin-bottom: 0px;">
+                        <button type="submit" class="btn btn-round btn-success">删除
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- col-lg-12-->
+</div>
+<script>
+$('#sidebar').find("a:eq(3)").attr("class", "active")
+</script>
+{% endblock %}

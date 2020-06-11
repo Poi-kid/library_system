@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}书籍详情{% endblock %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'lib/bootstrap-datepicker/css/datepicker.css' %}"/>
+{% endblock %}
+
+{% block content %}
+<script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+<div class="row mt">
+    <div class="col-lg-12">
+        <div class="row content-panel" style="display:flex;justify-content:center;">
+            <div class="col-md-4 profile-text mt mb centered">
+                <img src="{% static 'img/s2857294.jpg' %}"></div>
+            <!-- /col-md-4 -->
+            <div class="col-md-4 profile-text">
+                <h3>{{ book.name }}</h3>
+                <h6>{{ book.author }}</h6>
+                <p>
+                    《查拉图斯特拉如是说》是尼采假借查拉图斯特拉之名说出他自己的哲学思想，也可以说是一本查拉图斯特拉的说教集或者说是查拉图斯特拉的行藏录，又有点像圣者传一类的书，但这位圣者并不是宗教的圣者，而且本书并不像一般宗教书那样枯燥乏味，却是具有极高文学价值的散文诗。</p>
+                <p>
+                    《查拉图斯特拉如是说》是尼采的里程碑式的作品，几乎包括了尼采的全部思想。全书以汪洋恣肆的诗体写成，熔酒神的狂醉与日神的清醒于一炉，通过“超人”查拉图斯特拉之口宣讲未来世界的启示，在世界哲学史和诗歌史上均占有独特的不朽的地位。</p>
+                <br>
+                <p>
+                    <button class="btn btn-theme" onclick="book()"><i class="fa fa-bookmark"></i> 预定</button>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 mt">
+        <div class="row content-panel">
+            <!-- /panel-heading -->
+            <div class="panel-body">
+                <div class="tab-content">
+                    <div id="overview" class="tab-pane active">
+                        <div class="row" style="display:flex;justify-content:center;">
+                            <div class="col-md-6">
+                                <form action="{% url 'book' isbn %}" method="post">
+                                    {% csrf_token %}
+                                    <input name="book_or_comment" hidden>
+                                    <textarea name="content" rows="3" class="form-control" placeholder="说说你的想法"></textarea>
+                                    <div class="grey-style">
+                                        <div class="pull-right">
+                                            <button onclick="comment()" class="btn btn-sm btn-theme03">POST</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="detailed mt">
+                                    <h4>Recent Comment</h4>
+                                    <div class="recent-activity">
+                                        {% for comment in comments %}
+
+                                        <div class="activity-icon bg-theme"><i class="fa fa-comment"></i></div>
+                                        <div class="activity-panel">
+                                            <h5>{{ comment.time }}</h5>
+                                            <p>{{ comment.content }}</p>
+                                            <p style="padding-left: 80%;color: #4ECDC4;font-weight: bold;">{{ comment.username }}</p>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <!-- /recent-activity -->
+                                </div>
+                                <!-- /detailed -->
+                            </div>
+                            <!-- /col-md-6 -->
+                        </div>
+                        <!-- /OVERVIEW -->
+                    </div>
+                    <!-- /tab-pane -->
+                </div>
+                <!-- /tab-content -->
+            </div>
+            <!-- /panel-body -->
+        </div>
+        <!-- /col-lg-12 -->
+    </div>
+</div>
+<script>
+$('#sidebar').find("a:eq(2)").attr("class", "active")
+$('#header').css("position", "static")
+function book() {
+    $('[name="book_or_comment"]').attr("value", "book");
+    document.forms[0].submit();
+}
+function comment() {
+    $('[name="book_or_comment"]').attr("value", "comment");
+    document.forms[0].submit();
+}
+</script>
+{% endblock %}

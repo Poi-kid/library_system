@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/start/jquery-ui.css">
+<style type="text/css">
+/* IE has layout issues when sorting (see #5413) */
+.group {
+	zoom: 1
+}
+</style>
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script type="text/javascript">
+	$(function() {
+		var accordion = $("#accordion").accordion({
+			//配置当前打开的手风琴面板的索引，可以使用bool值或者int值，默认为0，表示当前打开的是第一个
+			//bool值仅当collapsible属性为true时可以使用，表示默认手风琴面板为折叠状态
+			active : false,
+			//配置手风琴面板是否可以折叠，默认是false
+			collapsible : true,
+			//禁用手风琴面板，可以使用bool值或者int数组
+			disabled : false,
+			//配置切换面板时使用的动画效果,可以设置bool值，number值，String值或者Object，默认值为null
+			//bool值表示是否有隐藏特效，如果为true，将以默认的时间和动画淡出选项卡
+			//number值表示选项卡将以指定的时间（单位毫秒）和默认动画淡出。
+			//String值表示选项卡将以指定的动画效果隐藏，动画时间为默认值
+			//Object值表示可以配置动画的类型和动画时间以及动画的延迟时间,effect,delay,duration,easing
+			animate : 100,
+			//激活手风琴面板的方式，默认为click
+			//"mouseover"表示鼠标移动到标题上即激活手风琴面板
+			//"click"表示鼠标点击激活手风琴面板
+			event : "click",
+			//设置手风琴面板的标题，貌似这里的设置必须和html标签一致，否则面板显示有问题啊，那这个设置了干嘛，草
+			header : "h3",
+			//设置手风琴面板高度，可以配置为"auto","fill","content"，默认为"content"
+			//"auto"表示手风琴面板高度将被设置成最高的那个手风琴面板的高度
+			//"fill"表示扩展到基于手风琴面板的父容器的可用高度
+			//"content"表示每个手风琴面板将以自身内容为高度
+			heightStyle : "auto",
+			//设置手风琴面板的标题前面的图标,分为两种，一种是折叠起来的面板的图标header，一种是打开激活的面板的图标activeHeader
+			//折叠起来的面板图标用header来配置，默认是"ui-icon-triangle-1-e"
+			//打开激活的面板图标用activeHeader来配置，默认是"ui-icon-triangle-1-s"
+			icons : {
+				"header" : "ui-icon-plus",
+				"activeHeader" : "ui-icon-minus"
+			},
+			//设置面板激活之后的回调方法，即点击另外一个选项卡在show动画完成之后执行的方法
+			//传入的ui对象有四个属性，他们都是Jquery对象
+			//一个是newHeader，代表新的面板标题
+			//一个是newPanel，代表新的面板内容
+			//一个是oldHeader，代表旧的面板标题
+			//一个是oldPanel，代表旧的面板内容
+			activate : function(event, ui) {
+				//var string = "";
+				//string += "activate\nnewHeader:" + ui.newHeader.html() + "\nnewPanel:" + ui.newPanel.html();
+				//string += "\noldHeader:" + ui.oldHeader.html() + "\noldPanel:" + ui.oldPanel.html();
+				alert("activate");
+			},
+			//设置面板即将激活的回调方法，可以阻止面板激活，传入的参数和activate事件相同，也可以使用绑定的方式将该事件绑定到选项卡上
+			beforeActivate : function(event, ui) {
+				alert("beforeActivate");
+			},
+			//设置面板创建之后的回调方法
+			//传入的ui对象有两个属性，他们都是Jquery对象
+			//一个是header,代表新创建的面板的标题
+			//一个是panel，代表新创建的面板的内容
+			create : function(event, ui) {
+				alert("create");
+			}
+		});
+		$("#destroy").button().click(function() {
+			accordion.accordion("destroy");//销毁手风琴面板方法,会将手风琴面板变成普通的html标签，慎用！
+		});
+		$("#disableAll").button().click(function() {
+			accordion.accordion("disable");//禁用所有手风琴面板
+		});
+		$("#disable1").button().click(function() {
+			accordion.accordion("disable", 0);//禁用第一个面板,手风琴面板没有禁用某一个面板的方法
+		});
+		$("#enableAll").button().click(function() {
+			accordion.accordion("enable");//启用所有手风琴面板
+		});
+		$("#isDisabled").button().click(function() {
+			var isDisabled = accordion.accordion("option", "disabled");//获取面板是否禁用的状态
+			alert(isDisabled);
+		});
+		$("#option").button().click(function() {
+			var option = accordion.accordion("option");//获取面板所有配置信息
+			var optionStr = "";
+			//遍历配置信息
+			for ( var p in option) {
+				optionStr += p + ":" + option[p] + "\n";
+			}
+			alert(optionStr);
+		});
+		$("#setMouseoverActive").button().click(function() {
+			accordion.accordion("option", "event", "mouseover");//设置激活面板方式为mouseover
+		});
+		$("#setMouseClickActive").button().click(function() {
+			accordion.accordion("option", {
+				"event" : "click"
+			});//设置激活面板方式为click
+		});
+		$("#refresh").button().click(function() {
+			accordion.accordion("refresh");//刷新面板，还不知道有什么作用
+		});
+		$("#widget").button().click(function() {
+			var parent = accordion.accordion("widget");
+			alert(parent.html());
+		});
+		$("#sortable").button().click(function() {
+			accordion.sortable({//使面板和标题可任意调换位置，这个还需深入研究，暂时不能实现
+				axis : "y",
+				handle : "h3",
+				stop : function(event, ui) {
+					// IE doesn't register the blur when sorting
+					// so trigger focusout handlers to remove .ui-state-focus
+					ui.item.children("h3").triggerHandler("focusout");
+				}
+			});
+		});
+	});
+</script>
+</head>
+<body>
+	<div id="accordion">
+		<div class="group">
+			<h3>Section 1</h3>
+			<div>
+				<p>Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer ut neque. Vivamus nisi metus,
+					molestie vel, gravida in, condimentum sit amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
+					odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.</p>
+			</div>
+		</div>
+		<div class="group">
+			<h3>Section 2</h3>
+			<div>
+				<p>Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet purus. Vivamus hendrerit, dolor at
+					aliquet laoreet, mauris turpis porttitor velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
+					suscipit faucibus urna.</p>
+			</div>
+		</div>
+		<div class="group">
+			<h3>Section 3</h3>
+			<div>
+				<p>Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis. Phasellus pellentesque purus in
+					massa. Aenean in pede. Phasellus ac libero ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
+					lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.</p>
+				<ul>
+					<li>List item one</li>
+					<li>List item two</li>
+					<li>List item three</li>
+				</ul>
+			</div>
+		</div>
+		<div class="group">
+			<h3>Section 4</h3>
+			<div>
+				<p>Cras dictum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+					Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia mauris vel
+					est.</p>
+				<p>Suspendisse eu nisl. Nullam ut libero. Integer dignissim consequat lectus. Class aptent taciti sociosqu ad
+					litora torquent per conubia nostra, per inceptos himenaeos.</p>
+			</div>
+		</div>
+	</div>
+	<button id="destroy">销毁手风琴面板</button>
+	<button id="disableAll">禁用所有面板</button>
+	<button id="disable1">禁用第一个面板</button>
+	<button id="enableAll">启用所有面板</button>
+	<button id="isDisabled">获取面板是否禁用状态</button>
+	<button id="option">获取面板所有配置信息</button>
+	<button id="setMouseoverActive">设置面板激活方式为mouseover</button>
+	<button id="setMouseClickActive">设置面板激活方式为click</button>
+	<button id="refresh">刷新面板</button>
+	<button id="widget">获取面板的父容器</button>
+	<button id="sortable">使面板和标题可移动位置</button>
+</body>
+</html>

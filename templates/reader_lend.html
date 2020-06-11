@@ -1,0 +1,62 @@
+{% extends 'base_reader.html' %}
+{% load static %}
+{% block title %}图书管理{% endblock %}
+{% block css %}
+{% endblock %}
+
+{% block content %}
+<h3><i class="fa fa-angle-right"></i> 预定书籍</h3>
+<div class="row mt">
+    <div class="col-md-12">
+        <div class="form-panel">
+            <form class="form-horizontal style-form" action="{% url 'reader_lend' %}" method="post">
+                {% csrf_token %}
+                <div>
+                    <div class="col-sm-10" style="width: 100%;display:flex;justify-content:center;margin-bottom: 15px;">
+                        <input name="key" type="text" class="form-control" style="width: 40%;" value="{{ form.key }}">
+                        <button name="search" type="submit" class="btn btn-round btn-primary" style="margin-left:1%;">
+                            <i class="fa fa-search"></i>
+                            搜索
+                        </button>
+                    </div>
+                </div>
+                <div style="width: 100%;display:flex;justify-content:center;">
+                    <div class="col-sm-10" style="width: 30%;display:flex;justify-content:space-between;">
+                        <label>
+                            <input type="radio" name="name_or_isbn" id="optionsRadios1" value="name" {{ form.method.name }}>
+                            根据书名搜索
+                        </label>
+                        <label>
+                            <input type="radio" name="name_or_isbn" id="optionsRadios2" value="isbn" {{ form.method.isbn }}>
+                            根据ISBN搜索
+                        </label>
+                    </div>
+                </div>
+            </form>
+            <hr>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    {% for name in table.names %}
+                    <th>{{ name }}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for record in table.records %}
+                <tr>
+                    {% for value in record.values %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                    <td><a href="{% url 'book' record.isbn %}">预约</a></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    $('#sidebar').find("a:eq(2)").attr("class", "active")
+</script>
+{% endblock %}

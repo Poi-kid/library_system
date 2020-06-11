@@ -1,0 +1,12 @@
+.background {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 50%;
+    float: left;
+}
+
+.text {
+    font-size: 80pt;
+}

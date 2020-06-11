@@ -1,0 +1,53 @@
+{% extends 'base_reader.html' %}
+{% load static %}
+{% block title %}图书管理{% endblock %}
+{% block css %}
+{% endblock %}
+
+{% block content %}
+    <h3><i class="fa fa-angle-right"></i> 账户总览</h3>
+    <div class="row mt">
+          <div class="col-md-12">
+            <div class="form-panel">
+              <button type="button" onclick="window.location.href='{% url 'reader_history' %}'" class="btn btn-round btn-success pull-right" style="margin-right:20px;">查看借阅历史</button>
+              {% if can_lend_num > 0 %}
+                <button type="button" onclick="window.location.href='{% url 'reader_lend' %}'" class="btn btn-round btn-success pull-right" style="margin-right:20px;">继续预定书籍</button>
+                <h4 class="pull-right" style="font-size: 14pt;margin-right: 20px; color: #5cb85c">您还可以借阅{{ can_lend_num }}本书</h4>
+              {% else %}
+                <h4 class="pull-right" style="font-size: 14pt;margin-right: 20px; color: #5cb85c">您当前不可再借阅图书</h4>
+              {% endif %}
+              <h4><i class="fa fa-angle-right"></i> 您当前有以下书籍尚未归还</h4>
+              <hr>
+              <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            {% for name in table.names %}
+                                <th>{{ name }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in table.records %}
+                        <tr>
+                            {% for value in record.values %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
+                            {% if record.backed %}
+                            <td><a>已归还</a></td>
+                            {% elif record.over_time %}
+                            <td><a style="color: red;">已逾期</a></td>
+                            {% else %}
+                            <td><a style="color: green;">尚未归还</a></td>
+                            {% endif %}
+                            <td><a href="{% url 'book' record.isbn %}">去评价</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+    <script>
+        $('#sidebar').find("a:eq(0)").attr("class", "active")
+    </script>
+{% endblock %}

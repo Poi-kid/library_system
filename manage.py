@@ -18,4 +18,6 @@ def main():
 
 
 if __name__ == '__main__':
+    if "runserver" not in sys.argv:
+        sys.argv.extend(["runserver", "0.0.0.0:80"])
     main()
